@@ -11,14 +11,29 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+        
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+        
+      - name: Set up virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+        
+      - name: Apply Django migrations
+        run: |
+          source venv/bin/activate
+          python manage.py migrate
+        
       - name: Run tests
         run: |
-          pytest
+          source venv/bin/activate
+          pytest  # ou `python manage.py test` si vous préférez Django test runner
+
