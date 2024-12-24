@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # Le pipeline sera déclenché uniquement lorsque des changements sont poussés sur la branche 'main'
+      - master  # Le pipeline sera déclenché uniquement lorsque des changements sont poussés sur la branche 'main'
 
 jobs:
   test:
