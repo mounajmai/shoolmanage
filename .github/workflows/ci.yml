@@ -3,42 +3,51 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - master
+      - main  # Le pipeline sera déclenché uniquement lorsque des changements sont poussés sur la branche 'main'
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Utilisation de l'image Ubuntu la plus récente sur GitHub Actions
+
     steps:
+      # Étape 1: Cloner le dépôt
       - name: Checkout code
         uses: actions/checkout@v3
         
+      # Étape 2: Configurer Python 3.9
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
         
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-        
+      # Étape 3: Créer et activer un environnement virtuel
       - name: Set up virtual environment
         run: |
-          python -m venv venv
-          source venv/bin/activate
-        
-      - name: Install dependencies in virtual environment
+          python -m venv venv  # Crée un environnement virtuel
+          source venv/bin/activate  # Active l'environnement virtuel
+
+      # Étape 4: Installer les dépendances dans l'environnement virtuel
+      - name: Install dependencies
         run: |
-          source venv/bin/activate
-          pip install -r requirements.txt  # Assurez-vous que django est dans requirements.txt
-        
+          source venv/bin/activate  # Active l'environnement virtuel
+          python -m pip install --upgrade pip  # Met à jour pip
+          pip install -r requirements.txt  # Installe les dépendances du fichier requirements.txt
+
+      # Étape 5: Appliquer les migrations Django (si nécessaire)
       - name: Apply Django migrations
         run: |
-          source venv/bin/activate
-          python manage.py migrate
-        
-      - name: Run tests
+          source venv/bin/activate  # Active l'environnement virtuel
+          python manage.py migrate  # Applique les migrations Django si nécessaire
+
+      # Étape 6: Exécuter les tests avec pytest
+      - name: Run tests with pytest
         run: |
-          source venv/bin/activate
-          pytest  # ou `python manage.py test` si vous préférez Django test runner
+          source venv/bin/activate  # Active l'environnement virtuel
+          pytest  # Exécute les tests avec pytest
+
+      # Étape 7 (facultative) : Vérifier les paquets installés
+      - name: List installed packages
+        run: |
+          source venv/bin/activate  # Active l'environnement virtuel
+          pip list  # Liste les paquets installés pour vérifier que pytest est présent
 
