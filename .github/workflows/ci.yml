@@ -27,6 +27,11 @@ jobs:
           python -m venv venv
           source venv/bin/activate
         
+      - name: Install dependencies in virtual environment
+        run: |
+          source venv/bin/activate
+          pip install -r requirements.txt  # Assurez-vous que django est dans requirements.txt
+        
       - name: Apply Django migrations
         run: |
           source venv/bin/activate
